@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+        <link rel="stylesheet" href="style_bmi.css">
+        <title>Kalkulator BMI</title>
+        <meta name="author" content="Arkadiusz Grygoruk">
+        <meta name="description" content="">
+        <meta name="keywords" content="Kalkulator BMI">
+        <script type="text/javascript" src="skrypty_bmi.js"></script>
+  </head>
+
+  <body>
+    <h1>Kalkulator BMI</h1>
+    <div class="calc">
+
+        <div class="container input">
+          <span>Wzrost:</span> <input type="text" id="inputHeight" size="12"> <br> 
+          <span>Waga:</span> <input type="text" id="inputWeight" size="12" > <br> <br>
+          <input type="submit" name="confirm" value=" Zatwierdź " onclick="getValueInput()">
+          <div class="statement"></div>    
+        </div>
+
+        <div class="container result">
+          Wzrost: <span id="Height"> 0 </span> <br>
+          Waga: <span id="Weight"> 0 </span> <br> <br>
+          Wyliczone BMI: <span id="resultBmi"> 0 </span>
+          <div class="statementBmi"></div>
+        </div>
+
+        <div class="container history">
+          <strong>Historia wyników:</strong> <br>
+          <div id="bmiHistory"></div> <br>
+          <input type="submit" name="cleanHistory" value="Wyczyść historię" onclick="clearHistory()">
+        </div>
+
+        <div class="bottomBar">
+          <div class="bottomBar_content">
+            <div class="bottomBar_text">
+              Wykonane przez: Arkadiusz Grygoruk, studia podyplomowe - Tester Manualny 1, 2021/2022
+            </div>
+            
+            <button type="button" class="darkmode" onclick="darkMode()">
+              Tryb nocny
+            </button>
+
+          </div>
+        </div>
+
+    </div>
+  </body>
+</html>
