@@ -8,6 +8,7 @@ body {
     width: auto;
 }
 
+
 .container {
     border: 1px solid black;
     border-radius: 4px;
@@ -32,7 +33,7 @@ h1 {
     text-align: center;
 }
 
-#bmiHistory div {
+#bmiHistory .entry {
     margin-top: 10px;
 }
 
@@ -76,4 +77,25 @@ h1 {
     color: #e6e6e6;
 }
 
+.hideStats {
+    display: none;
+}
 
+#bmiHistory .entry div {
+    cursor: pointer;
+}
+
+.averageMessage {
+    margin-bottom: 16px;
+    font-size: larger;
+}
+
+.darkContainers {
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 1%;
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+}

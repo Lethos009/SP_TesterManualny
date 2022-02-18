@@ -7,6 +7,7 @@ let counter = 0;
 let history = [];
 let bmi = 0;
 let statementArray = [];
+let averageBmi = [];
 
 function getValueInput() {
   let bmiCache =[];
@@ -24,7 +25,7 @@ function getValueInput() {
   let today = new Date();
   let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
   let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  let dateTime = date +' '+ time;
+  let dateTime = date +', '+ time;
 
     if (checkHeight !== 0 && checkWeigth !== 0) {
       /* Wypisanie danych w module wynikow */
@@ -43,15 +44,19 @@ function getValueInput() {
       bmiCache[3] = weightVal;
       bmiCache[4] = dateTime;
       history.push(bmiCache);
+      averageBmi.push(bmiCache[1]);
 
-      // console.log(bmiCache);
+      // console.log(avgBmi);
       // console.log(history[counter]);
 
-      /* Wypisywanie historii wynikow */
-      document.querySelector("#bmiHistory").innerHTML = document.querySelector("#bmiHistory").innerHTML + "<div> Pomiar " + history[counter][0] + ", BMI: " + "<strong>" + history[counter][1] + "</strong> (" + history[counter][2] + " cm, " + history[counter][3] + " kg), <br> wykonano: " +  history[counter][4] +"</div>";
-
-      bmiStatement();
+      document.querySelector("#bmiHistory").innerHTML = document.querySelector("#bmiHistory").innerHTML + 
+      "<div class='entry'> <div id='shown"+ history[counter][0] + "' onclick=\"toggle("+ history[counter][0] +")\"> Pomiar " + history[counter][0] + ", z: " 
+      +  history[counter][4] + "</div> <div id='hidden"+ history[counter][0] + "' class='hideStats'>BMI: " + "<strong>" + history[counter][1] 
+      + "</strong> (" + history[counter][2] + " cm, " + history[counter][3] + " kg) </div></div>";
       
+      averageBmiCalculation();
+      bmiStatement();
+
       counter++;
 
     } else { 
@@ -71,18 +76,47 @@ function getValueInput() {
 
 }
 
+/* Wyswietlanie i chowanie informacji o danym pomiarze */
+function toggle(a) {
+  let hiddenIdNumber = "hidden" + a;
+  let element = document.getElementById(hiddenIdNumber);
+  
+    if (element) {
+      let display = element.style.display;
+  
+      if (display == "none") {
+          element.style.display = "block";
+      } else {
+          element.style.display = "none";
+      }
+    }
+}
+
+/* Liczenie i wyświetlanie średniej */
+function averageBmiCalculation() {
+  let bmiSum = 0;
+  let bmiAvg = 0;
+
+  for(let i = 0; i < averageBmi.length; i++) {
+    bmiSum = parseFloat(averageBmi[i]); 
+    bmiAvg += bmiSum/averageBmi.length;
+  }
+
+  document.querySelector(".averageMessage").innerHTML = "Średnie BMI: <strong>" + bmiAvg.toFixed(2) + "</strong>";
+}
+
 /* Wyswielenie komunikatu o zwiekszeniu lub zmniejszeniu bmi */
 function bmiStatement() {
   let currentBmi = history[counter][1];
   statementArray.push(currentBmi);
 
-  if (statementArray.length >= 2 && statementArray[counter - 1] > statementArray[counter]) {
+  if (statementArray.length >= 2 && parseFloat(statementArray[counter - 1]) > parseFloat(statementArray[counter])) {
     document.querySelector(".statementBmi").innerHTML = "<strong>Twoje BMI spadło!</strong>"
   } else { 
-    if (statementArray.length >= 2 && statementArray[counter - 1] < statementArray[counter]) {
+    if (statementArray.length >= 2 && parseFloat(statementArray[counter - 1]) < parseFloat(statementArray[counter])) {
       document.querySelector(".statementBmi").innerHTML = "<strong>Twoje BMI wzrosło!</strong>"
     } else {
-      if (statementArray.length < 2 && statementArray[counter - 1] > statementArray[counter]) {
+      if (statementArray.length < 2 && parseFloat(statementArray[counter - 1]) > parseFloat(statementArray[counter])) {
         return ; 
       } else {
         document.querySelector(".statementBmi").innerHTML = "<strong>Twoje BMI jest stałe.</strong>"
@@ -101,6 +135,7 @@ function clearHistory() {
   document.querySelector("#resultBmi").innerHTML ="0";
   document.querySelector(".statement").innerHTML ="";
   document.querySelector(".statementBmi").innerHTML = "";
+  document.querySelector(".averageMessage").innerHTML ="";
 
   history = [];
   bmiCache = [];
@@ -110,5 +145,13 @@ function clearHistory() {
 
 function darkMode() {
   let body = document.body;
+  let containter1 = document.querySelector(".input");
+  let containter2 = document.querySelector(".result");
+  let containter3 = document.querySelector(".history");
+
   body.classList.toggle("dark");
-  }
+  containter1.classList.toggle("darkContainers");
+  containter2.classList.toggle("darkContainers");
+  containter3.classList.toggle("darkContainers");
+}
+ 
