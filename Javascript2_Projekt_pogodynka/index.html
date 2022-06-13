@@ -21,19 +21,24 @@
           </div>
         </div>
       </div>
-    <div class="clock"></div>
+      <div class="datetime">
+        <div class="date"></div>
+        <div class="clock"></div>
+      </div>
     </div>
 
 
    <div class="pageBody">
 
       <div class="currentWeather">
-        <h2 class="header">Pogoda aktualna</h2>
+        <div class="currentWeatherHeader"><h2 class="header">Pogoda aktualna</h2></div>
         <div class="weather">
           <div class="row1">
-            <div><span class="temp"></span></div>
-            <div><span class="weatherIcon"></span> </div>
-            <div><span class="cloudy"></span></div>
+            <div class="row1containter1"><span class="temp"></span></div>
+            <div class="row1containter2">
+              <div><span class="weatherIcon"></span> </div>
+              <div><span class="cloudy"></span></div>
+            </div>
           </div>
           <div class="row2">
             <div><span class="windSpeed"></span></div>
@@ -41,6 +46,7 @@
           </div>
           <div class="row3">
             <div><span class="sunrise"></span></div>
+            <div><span><img class="weatherIconSun" src="icons/weather_morning_sun_sunrise_icon.png" alt="sunrise-sunset"></span></div>
             <div><span class="sunset"></span></div>
           </div>
         </div>
@@ -69,7 +75,7 @@
     <div class="bottomBar">
       <div class="bottomBar_content">
         <div class="bottomBar_text">
-          Wykonane przez: Arkadiusz Grygoruk, studia podyplomowe - Tester Manualny 1, 2021/2022
+          Wykonane przez: Arkadiusz Grygoruk, studia podyplomowe - Tester aplikacji 1, 2021/2022
     </div>
     <script>
       
@@ -98,6 +104,8 @@
       const elementSearchInput = document.querySelector(".searchInput");
       const elementInput = document.querySelector("input");
       const elementAutocomplete = document.querySelector(".autocompleteSearch");
+
+     
 
 
       elementInput.onkeyup = (e) => {
@@ -170,6 +178,7 @@
       let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
 
       let elementPrzycisk = document.querySelector("#przycisk");
+      let elementSunIcon = document.querySelector(".row3 .weatherIconSun");
 
       
       function rozpakujDane(dane) {
@@ -190,11 +199,11 @@
         let pojutrzeZachm = dane.prognoza.pojutrze.zachmurzenie;
 
         elementDzisTemp.innerHTML = dzisTemp + " C";
-        elementDzisZachmurzenie.innerHTML = dzisZachm + "%";
+        elementDzisZachmurzenie.innerHTML = "Zachmurzenie: " + dzisZachm + "%";
         elementDzisPredkoscWiatru.innerHTML = dzisPredkoscWiatru + " km/h";
         elementDzisKierunekWiatru.innerHTML = dzisKierunekWiatru;
-        elementDzisWschodSlonca.innerHTML = "Wschód słońca: " + dzisWschodSlonca;
-        elementDzisZachodSlonca.innerHTML = "Zachód słońca: " + dzisZachodSlonca;
+        elementDzisWschodSlonca.innerHTML = "Wschód słońca: <b>" + dzisWschodSlonca + "</b>";
+        elementDzisZachodSlonca.innerHTML = "Zachód słońca: <b>" + dzisZachodSlonca + "</b>";
         elementDzisIkonka.innerHTML = '<img src="icons/ikonki/' + dzisIkonka + '.png">';
         header.innerHTML = "Pogoda aktualna - " + city;
 
@@ -204,6 +213,8 @@
         elementPojutrzeTemp.innerHTML = pojutrzeTemp + " C";
         elementPojutrzeZachmurzenie.innerHTML = pojutrzeZachm + "%";
 
+        elementSunIcon.classList.add("active");
+
       }
 
       function odbierzDane(response) {
@@ -211,42 +222,43 @@
       }
 
 
-      //--------------------Zegar--------------------
-      // function startTime() {
-      //   let today = new Date();
-      //   let hr = today.getHours();
-      //   let min = today.getMinutes();
-      //   let sec = today.getSeconds();
-      //   ap = (hr < 12) ? "<span>AM</span>" : "<span>PM</span>";
-      //   hr = (hr == 0) ? 12 : hr;
-      //   hr = (hr > 12) ? hr - 12 : hr;
+      // --------------------Zegar--------------------
 
-      //   //Add a zero in front of numbers<10
-      //   hr = checkTime(hr);
-      //   min = checkTime(min);
-      //   sec = checkTime(sec);
-      //   document.getElementById("clock").innerHTML = hr + ":" + min + ":" + sec + " " + ap;
-        
-      //   let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      //   let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      //   let curWeekDay = days[today.getDay()];
-      //   let curDay = today.getDate();
-      //   let curMonth = months[today.getMonth()];
-      //   let curYear = today.getFullYear();
-      //   let date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear;
-      //   document.getElementById("date").innerHTML = date;
-        
-      //   let time = setTimeout(function(){ startTime() }, 500);
-      // }
-
-      // function checkTime(i) {
-      //   if (i < 10) {
-      //     i = "0" + i;
-      //   }
-      //   return i;
-      // }
+      function currentTime() {
+        let date = new Date();
+        let hh = date.getHours();
+        let mm = date.getMinutes();
+        let ss = date.getSeconds();
+        let session = "";
 
 
+        if (hh > 12) {
+          session = "";
+        }
+
+        hh = (hh < 10) ? "0" + hh : hh;
+        mm = (mm < 10) ? "0" + mm : mm;
+        ss = (ss < 10) ? "0" + ss : ss;
+
+        let time = hh + ":" + mm + ":" + ss + " " + session;
+
+        document.querySelector(".clock").innerText = time;
+        let t = setTimeout(function () { currentTime() }, 1000);
+
+      }
+      currentTime();
+
+// -----------------------------Wyswietlanie daty-----------------------------
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth());
+      let yyyy = today.getFullYear();
+
+      let months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
+      "lipiec", "sierpień", "wrzesień", "pazdziernik", "listopad", "grudzień"];
+
+      today = dd + ' ' + months[mm] + ' ' + yyyy;
+      document.querySelector(".date").innerHTML = today;
 
     </script>
   </body>
