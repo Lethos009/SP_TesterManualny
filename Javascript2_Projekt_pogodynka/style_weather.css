@@ -1,0 +1,307 @@
+body {
+    font-family:  Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: rgb(131, 218, 255);
+}
+
+.pageBody
+{
+    display: flex;
+    justify-content: center;
+    padding-top: 8em;
+}
+
+.topBar{
+    position: fixed;
+    height: 63px;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: gray;
+}
+
+.searchBar{
+    background-color: rgb(107, 162, 213);
+    width: 400px;
+    margin: 10px 15px;
+    border-radius: 5px;
+    position: fixed;
+}
+
+.searchBar .searchInput{
+    background: rgb(255, 255, 255);
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px 3px rgba(0, 0, 0, 0.12);
+    position: relative;
+    
+}
+
+.searchInput input{
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    font-size: 18px;
+}
+
+.searchInput .searchIcon{
+    height: 30px;
+    width: 30px;
+    line-height: 35px;
+    position: absolute;
+    top: 0;
+    margin-top: 5px;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.searchInput .autocompleteSearch{
+    padding: 0px;
+    max-height: 280px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.searchInput.active .autocompleteSearch{
+    padding: 10px 8px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.autocompleteSearch li{
+    list-style: none;
+    padding: 8px 12px;
+    width: 93%;
+    cursor: default;
+    border-radius: 3px;
+    color: black;
+    display: none;
+}
+
+.searchInput.active .autocompleteSearch li{
+    display: block;
+}
+
+.autocompleteSearch li:hover{
+    background: rgb(155, 155, 155);
+}
+
+/* .topBar .clock{
+    right: 0; 
+} */
+
+
+.currentWeather 
+{
+    border: 1px solid black;
+    background-color: rgb(208, 241, 255);
+    border-radius: 4px;
+    padding: 2%;
+    margin: 10px;
+    width: 400px;
+    height: auto;
+    justify-content: space-evenly;
+    /* display: flex; */
+       
+}
+
+.currentWeather .weather{
+    /* display: flex; */
+    flex-wrap: wrap;
+}
+.currentWeather .weather .row1, .currentWeather .weather .row2{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 20px;
+    
+}
+.currentWeather .weather .row1 span{
+   font-size: 40px;
+   
+    
+}
+
+.currentWeather .temp, .cloudy{
+    background-color: rgb(160, 210, 253);
+    border-radius: 6px;
+    box-shadow: 10%;
+    /* padding: 5px; */
+    
+}
+
+.currentWeather .windSpeed, .currentWeather .windDirection, .currentWeather .sunrise, .currentWeather .sunset{
+    background-color: rgb(160, 210, 253);
+    border-radius: 6px;
+    /* padding: 3px; */
+    margin: 5px;
+}
+
+
+
+.currentWeather .weather .row2 span{
+    font-size: 20px;
+     
+}
+
+
+.currentWeather .weather .row3{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+}
+
+.currentWeather .weather .row3 span{
+    font-size: 15px;
+    justify-content: space-evenly;
+}
+ 
+
+.currentWeather .weatherIcon img{
+    height: 70px;
+}
+
+/* .currentWeather .temp{
+    text-size-adjust: 20px;
+} */
+
+
+
+.pogodaKolejne{
+    border: 1px solid black;
+    background-color: rgb(208, 241, 255);
+    border-radius: 4px;
+    padding: 1%;
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+}
+
+
+
+.map{
+    border: 1px solid black;
+    background-color: royalblue;
+    border-radius: 4px;
+    padding: 1%;
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+    display: none;
+}
+
+.pogodaJutro, .pogodaPojutrze{
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1%;
+    margin: 20px;
+    width: auto;
+    height: auto;
+    justify-content: center;
+}
+
+
+
+/* .calc {
+    display: flex;
+    width: auto;
+}
+
+
+.container {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1%;
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+  
+}
+.calc {
+    justify-content: center;
+}
+
+#resultBmi {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+}
+
+#bmiHistory .entry {
+    margin-top: 10px;
+}
+
+.statementBmi {
+    margin-top: 28px;
+} */
+
+.bottomBar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background:rgb(56, 56, 56) ;
+    color: white;
+    box-sizing: border-box;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+}
+
+.bottomBar_content {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottomBar_content {
+    display: flex;
+    align-items: center;
+}
+
+/* #inputHeight, #inputWeight {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+
+.dark{
+    background-color: rgb(0, 0, 30);
+    color: #e6e6e6;
+}
+
+.hideStats {
+    display: none;
+}
+
+#bmiHistory .entry div {
+    cursor: pointer;
+}
+
+.averageMessage {
+    margin-bottom: 16px;
+    font-size: larger;
+}
+
+.darkContainers {
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 1%;
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+} */
