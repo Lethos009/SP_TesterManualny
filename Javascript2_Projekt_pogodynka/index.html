@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Portal z prognozą pogody</title>
+    <link rel="stylesheet" href="style_weather.css" />
+    <meta name="author" content="Arkadiusz Grygoruk" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="Prognoza pogody" />
+    <!-- <script type="text/javascript" src="script_weather.js" async></script> -->
+  </head>
+  <body>
+    <div class="topBar">
+      <div class="searchBar">
+        <div class="searchInput">
+          <input type="text" placeholder="Wyszukaj miasto">
+          <div class="autocompleteSearch">
+          </div>
+          <div class="icon">
+            <img class="searchIcon" src="icons/search_icon.png">
+          </div>
+        </div>
+      </div>
+    <div class="clock"></div>
+    </div>
+
+
+   <div class="pageBody">
+
+      <div class="currentWeather">
+        <h2 class="header">Pogoda aktualna</h2>
+        <div class="weather">
+          <div class="row1">
+            <div><span class="temp"></span></div>
+            <div><span class="weatherIcon"></span> </div>
+            <div><span class="cloudy"></span></div>
+          </div>
+          <div class="row2">
+            <div><span class="windSpeed"></span></div>
+            <div><span class="windDirection"></span></div>
+          </div>
+          <div class="row3">
+            <div><span class="sunrise"></span></div>
+            <div><span class="sunset"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pogodaKolejne">
+        <h2>Prognoza na kolejne dni</h2>
+        <div class="pogodaJutro">
+          <div><span class="ikona"></span></div>
+          <div>Temperatura: <span class="temp"></span></div>
+          <div>Zachmurzenie: <span class="zachmurzenie"></span></div>
+        </div>
+
+        <div class="pogodaPojutrze">
+          <div><span class="ikona"></span></div>
+          <div>Temperatura: <span class="temp"></span></div>
+          <div>Zachmurzenie: <span class="zachmurzenie"></span></div>
+        </div>
+      </div>
+
+      <div class="map">
+
+      </div>
+   </div>
+
+    <div class="bottomBar">
+      <div class="bottomBar_content">
+        <div class="bottomBar_text">
+          Wykonane przez: Arkadiusz Grygoruk, studia podyplomowe - Tester Manualny 1, 2021/2022
+    </div>
+    <script>
+      
+      let sugestCities =[];
+      fetchCities();
+
+      function fetchCities() {
+        fetch("https://www.wowapi.pl/pogoda/miasta")
+          .then(function (getCities) {
+            getCities.json().then(function (makeList) {
+              let citiesList = makeList;
+              let cityNames = Object.entries(citiesList);
+              for (i = 0; i < citiesList.length; i++) {
+                sugestCities.push(cityNames[i][1].nazwa);
+
+              }
+              // console.log(sugestCities);
+            });
+          });
+      }
+
+
+      // ----------------------------------------Moduł wyszukiwania miasta----------------------------------------
+      let selectUserInput;
+
+      const elementSearchInput = document.querySelector(".searchInput");
+      const elementInput = document.querySelector("input");
+      const elementAutocomplete = document.querySelector(".autocompleteSearch");
+
+
+      elementInput.onkeyup = (e) => {
+        let userInput = e.target.value;
+        let emptyArray = [];
+        if (userInput) {
+          emptyArray = sugestCities.filter((arrayData) => {
+            return arrayData.toLocaleLowerCase().startsWith(userInput.toLocaleLowerCase());
+          });
+          emptyArray = emptyArray.map((arrayData) => {
+            return arrayData = '<li>' + arrayData + '</li>';
+          });
+          // console.log(emptyArray);
+          elementSearchInput.classList.add("active");
+          writeSuggestions(emptyArray);
+          let allList = elementAutocomplete.querySelectorAll("li");
+          for (let i = 0; i < allList.length; i++) {
+            allList[i].setAttribute("onclick", "select(this)");
+          }
+        } else {
+          elementSearchInput.classList.remove("active");
+        }
+      }
+
+
+      function select(element){
+        let selectUserInput = element.textContent;
+        elementInput.value = selectUserInput;
+        elementSearchInput.classList.remove("active");
+        console.log(selectUserInput);
+        
+        // --------------funkcjafetchData()---------------;
+        if(selectUserInput != "Brak wyników"){
+          console.log("Klik! - wyszukiwanie");
+        fetch("https://www.wowapi.pl/pogoda/prognoza?miasto=" + selectUserInput)
+          .then(odbierzDane);
+        }else{
+          alert("Błędne dane!");
+          elementInput.value = "";
+        }
+        
+      }
+
+      function writeSuggestions(list){
+        let listData;
+        if(!list.length){
+          userValue = elementInput.value;
+          listData = '<li>Brak wyników</li>';
+        }else{
+          listData = list.join('')
+        }
+        elementAutocomplete.innerHTML = listData
+      }
+
+      // ----------------------------------------------------------------------------------------------------------
+
+      let header = document.querySelector(".currentWeather .header")
+      let elementDzisTemp = document.querySelector(".currentWeather .temp");
+      let elementDzisZachmurzenie = document.querySelector(".currentWeather .cloudy");
+      let elementDzisPredkoscWiatru = document.querySelector(".currentWeather .windSpeed");
+      let elementDzisKierunekWiatru = document.querySelector(".currentWeather .windDirection");
+      let elementDzisWschodSlonca = document.querySelector(".currentWeather .sunrise");
+      let elementDzisZachodSlonca = document.querySelector(".currentWeather .sunset");
+      let elementDzisIkonka = document.querySelector(".currentWeather .weatherIcon")
+
+      let elementJutroTemp = document.querySelector(".pogodaJutro .temp");
+      let elementJutroZachmurzenie = document.querySelector(".pogodaJutro .zachmurzenie");
+
+      let elementPojutrzeTemp = document.querySelector(".pogodaPojutrze .temp");
+      let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
+
+      let elementPrzycisk = document.querySelector("#przycisk");
+
+      
+      function rozpakujDane(dane) {
+        let city = dane.miasto;
+        let dzisTemp = dane.teraz.temperatura;
+        let dzisZachm = dane.teraz.zachmurzenie;
+        let dzisPredkoscWiatru = dane.teraz.wiatrPrędkość;
+        let dzisKierunekWiatru = dane.teraz.wiatrKierunekSłownie;
+        let dzisWschodSlonca = dane.teraz.wschódSłońca;
+        let dzisZachodSlonca = dane.teraz.zachódSłońca;
+        let dzisIkonka = dane.teraz.ikonka;
+        
+
+        let jutroTemp = dane.prognoza.jutro.temperatura;
+        let jutroZachm = dane.prognoza.jutro.zachmurzenie;
+
+        let pojutrzeTemp = dane.prognoza.pojutrze.temperatura;
+        let pojutrzeZachm = dane.prognoza.pojutrze.zachmurzenie;
+
+        elementDzisTemp.innerHTML = dzisTemp + " C";
+        elementDzisZachmurzenie.innerHTML = dzisZachm + "%";
+        elementDzisPredkoscWiatru.innerHTML = dzisPredkoscWiatru + " km/h";
+        elementDzisKierunekWiatru.innerHTML = dzisKierunekWiatru;
+        elementDzisWschodSlonca.innerHTML = "Wschód słońca: " + dzisWschodSlonca;
+        elementDzisZachodSlonca.innerHTML = "Zachód słońca: " + dzisZachodSlonca;
+        elementDzisIkonka.innerHTML = '<img src="icons/ikonki/' + dzisIkonka + '.png">';
+        header.innerHTML = "Pogoda aktualna - " + city;
+
+        elementJutroTemp.innerHTML = jutroTemp + " C";
+        elementJutroZachmurzenie.innerHTML = jutroZachm + "%";
+
+        elementPojutrzeTemp.innerHTML = pojutrzeTemp + " C";
+        elementPojutrzeZachmurzenie.innerHTML = pojutrzeZachm + "%";
+
+      }
+
+      function odbierzDane(response) {
+        response.json().then(rozpakujDane);
+      }
+
+
+      //--------------------Zegar--------------------
+      // function startTime() {
+      //   let today = new Date();
+      //   let hr = today.getHours();
+      //   let min = today.getMinutes();
+      //   let sec = today.getSeconds();
+      //   ap = (hr < 12) ? "<span>AM</span>" : "<span>PM</span>";
+      //   hr = (hr == 0) ? 12 : hr;
+      //   hr = (hr > 12) ? hr - 12 : hr;
+
+      //   //Add a zero in front of numbers<10
+      //   hr = checkTime(hr);
+      //   min = checkTime(min);
+      //   sec = checkTime(sec);
+      //   document.getElementById("clock").innerHTML = hr + ":" + min + ":" + sec + " " + ap;
+        
+      //   let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      //   let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      //   let curWeekDay = days[today.getDay()];
+      //   let curDay = today.getDate();
+      //   let curMonth = months[today.getMonth()];
+      //   let curYear = today.getFullYear();
+      //   let date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear;
+      //   document.getElementById("date").innerHTML = date;
+        
+      //   let time = setTimeout(function(){ startTime() }, 500);
+      // }
+
+      // function checkTime(i) {
+      //   if (i < 10) {
+      //     i = "0" + i;
+      //   }
+      //   return i;
+      // }
+
+
+
+    </script>
+  </body>
+</html>
