@@ -33,6 +33,7 @@
       <div class="currentWeather">
         <div class="currentWeatherHeader"><h2 class="header">Pogoda aktualna</h2></div>
         <div class="weather">
+
           <div class="row1">
             <div class="row1containter1"><span class="temp"></span></div>
             <div class="row1containter2">
@@ -40,21 +41,27 @@
               <div><span class="cloudy"></span></div>
             </div>
           </div>
+
           <div class="row2">
-            <div><span class="windSpeed"></span></div>
-            <div><span class="windDirection"></span></div>
+            <div class="row2cont1">
+              <div><span class="windHeader"></span></div>
+              <div><span class="windSpeed"></span></div>
+              <div><span class="windDirection"></span></div>
+            </div>
+          
+            <div class="row2cont2">
+              <div><span><img class="weatherIconSun" src="icons/weather_morning_sun_sunrise_icon.png" alt="sunrise-sunset"></span></div>
+              <div><span class="sunrise"></span></div>
+              <div><span class="sunset"></span></div>
+            </div>
           </div>
-          <div class="row3">
-            <div><span class="sunrise"></span></div>
-            <div><span><img class="weatherIconSun" src="icons/weather_morning_sun_sunrise_icon.png" alt="sunrise-sunset"></span></div>
-            <div><span class="sunset"></span></div>
-          </div>
+
         </div>
       </div>
 
       <div class="pogodaKolejne">
         <h2>Prognoza na kolejne dni</h2>
-        <div class="pogodaJutro">
+        <div class="weatherTomorrow">
           <div><span class="ikona"></span></div>
           <div>Temperatura: <span class="temp"></span></div>
           <div>Zachmurzenie: <span class="zachmurzenie"></span></div>
@@ -83,7 +90,7 @@
       fetchCities();
 
       function fetchCities() {
-        fetch("https://www.wowapi.pl/pogoda/miasta")
+        fetch("http://weather-api-alpha.herokuapp.com/pogoda/miasta")
           .then(function (getCities) {
             getCities.json().then(function (makeList) {
               let citiesList = makeList;
@@ -140,7 +147,7 @@
         // --------------funkcjafetchData()---------------;
         if(selectUserInput != "Brak wyników"){
           console.log("Klik! - wyszukiwanie");
-        fetch("https://www.wowapi.pl/pogoda/prognoza?miasto=" + selectUserInput)
+        fetch("http://weather-api-alpha.herokuapp.com/pogoda/prognoza?miasto=" + selectUserInput)
           .then(odbierzDane);
         }else{
           alert("Błędne dane!");
@@ -162,7 +169,9 @@
 
       // ----------------------------------------------------------------------------------------------------------
 
-      let header = document.querySelector(".currentWeather .header")
+      let header = document.querySelector(".currentWeather .header");
+      let elementWindHeader = document.querySelector(".windHeader");
+      let elementCurrentWeather = document.querySelector(".currentWeather");
       let elementDzisTemp = document.querySelector(".currentWeather .temp");
       let elementDzisZachmurzenie = document.querySelector(".currentWeather .cloudy");
       let elementDzisPredkoscWiatru = document.querySelector(".currentWeather .windSpeed");
@@ -171,14 +180,15 @@
       let elementDzisZachodSlonca = document.querySelector(".currentWeather .sunset");
       let elementDzisIkonka = document.querySelector(".currentWeather .weatherIcon")
 
-      let elementJutroTemp = document.querySelector(".pogodaJutro .temp");
-      let elementJutroZachmurzenie = document.querySelector(".pogodaJutro .zachmurzenie");
+      let elementJutroTemp = document.querySelector(".weatherTomorrow .temp");
+      let elementJutroZachmurzenie = document.querySelector(".weatherTomorrow .zachmurzenie");
 
       let elementPojutrzeTemp = document.querySelector(".pogodaPojutrze .temp");
       let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
 
       let elementPrzycisk = document.querySelector("#przycisk");
       let elementSunIcon = document.querySelector(".row3 .weatherIconSun");
+      
 
       
       function rozpakujDane(dane) {
@@ -198,8 +208,10 @@
         let pojutrzeTemp = dane.prognoza.pojutrze.temperatura;
         let pojutrzeZachm = dane.prognoza.pojutrze.zachmurzenie;
 
-        elementDzisTemp.innerHTML = dzisTemp + " C";
+        elementDzisTemp.innerHTML = dzisTemp + "°C";
         elementDzisZachmurzenie.innerHTML = "Zachmurzenie: " + dzisZachm + "%";
+
+        elementWindHeader.innerHTML = "Wiatr";
         elementDzisPredkoscWiatru.innerHTML = dzisPredkoscWiatru + " km/h";
         elementDzisKierunekWiatru.innerHTML = dzisKierunekWiatru;
         elementDzisWschodSlonca.innerHTML = "Wschód słońca: <b>" + dzisWschodSlonca + "</b>";
@@ -214,7 +226,7 @@
         elementPojutrzeZachmurzenie.innerHTML = pojutrzeZachm + "%";
 
         elementSunIcon.classList.add("active");
-
+        elementCurrentWeather.classList.add("active");
       }
 
       function odbierzDane(response) {
