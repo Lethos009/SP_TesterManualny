@@ -9,7 +9,7 @@
     <meta name="keywords" content="Prognoza pogody" />
     <!-- <script type="text/javascript" src="script_weather.js" async></script> -->
   </head>
-  <body>
+  <body class="night">
     <div class="topBar">
       <div class="searchBar">
         <div class="searchInput">
@@ -29,10 +29,9 @@
 
 
    <div class="pageBody">
-
       <div class="currentWeather">
         <div class="currentWeatherHeader"><h2 class="header">Pogoda aktualna</h2></div>
-        <div class="weather">
+        <div class="weather hidden">
 
           <div class="row1">
             <div class="row1containter1"><span class="temp"></span></div>
@@ -44,33 +43,45 @@
 
           <div class="row2">
             <div class="row2cont1">
-              <div><span class="windHeader"></span></div>
-              <div><span class="windSpeed"></span></div>
-              <div><span class="windDirection"></span></div>
+              <span class="windIcon"></span>
+              <span class="windSpeed"></span>
+              <span class="windDirection"></span>
             </div>
           
             <div class="row2cont2">
-              <div><span><img class="weatherIconSun" src="icons/weather_morning_sun_sunrise_icon.png" alt="sunrise-sunset"></span></div>
-              <div><span class="sunrise"></span></div>
-              <div><span class="sunset"></span></div>
+              <span class="sunriseIcon"></span>
+              <span class="sunrise"></span>
+              <span class="sunset"></span>
             </div>
           </div>
 
         </div>
       </div>
 
-      <div class="pogodaKolejne">
-        <h2>Prognoza na kolejne dni</h2>
-        <div class="weatherTomorrow">
-          <div><span class="ikona"></span></div>
-          <div>Temperatura: <span class="temp"></span></div>
-          <div>Zachmurzenie: <span class="zachmurzenie"></span></div>
+      <div class="weatherNext">
+        <div class="weatherNextHeader"><h2 class="header">Prognoza na kolejne dni</h2></div>
+        
+        <div class="weatherTomorrow hidden">
+          <span class="headerDateTomorrow"></span>
+          <div class="tomorrowContainer">
+            <div class="iconCloudyTomorrow">
+              <span class="iconTomorrow"></span>
+              <span class="cloudyTomorrow"></span>
+            </div>
+              <span class="tempTomorrow"></span>
+          </div>
         </div>
 
-        <div class="pogodaPojutrze">
-          <div><span class="ikona"></span></div>
-          <div>Temperatura: <span class="temp"></span></div>
-          <div>Zachmurzenie: <span class="zachmurzenie"></span></div>
+        <div class="weatherDayAfter hidden">
+          <span class="headerDateDayAfter"></span>
+          <div class="dayAfterContainer">
+            <div class="iconCloudyDayAfter">
+              <span class="iconDayAfter"></span>
+              <span class="cloudyDayAfter"></span>
+            </div>
+            <span class="tempDayAfter"></span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -170,8 +181,7 @@
       // ----------------------------------------------------------------------------------------------------------
 
       let header = document.querySelector(".currentWeather .header");
-      let elementWindHeader = document.querySelector(".windHeader");
-      let elementCurrentWeather = document.querySelector(".currentWeather");
+      let elementCurrentWeather = document.querySelector(".currentWeather .weather");
       let elementDzisTemp = document.querySelector(".currentWeather .temp");
       let elementDzisZachmurzenie = document.querySelector(".currentWeather .cloudy");
       let elementDzisPredkoscWiatru = document.querySelector(".currentWeather .windSpeed");
@@ -180,14 +190,22 @@
       let elementDzisZachodSlonca = document.querySelector(".currentWeather .sunset");
       let elementDzisIkonka = document.querySelector(".currentWeather .weatherIcon")
 
-      let elementJutroTemp = document.querySelector(".weatherTomorrow .temp");
-      let elementJutroZachmurzenie = document.querySelector(".weatherTomorrow .zachmurzenie");
+      let elementWeatherTomorrow = document.querySelector(".weatherNext .weatherTomorrow");
+      let elementDateTomorrow = document.querySelector(".headerDateTomorrow");
+      let elementIconTomorrow = document.querySelector(".iconTomorrow");
+      let elementTempTomorrow = document.querySelector(".tempTomorrow");
+      let elementCloudyTomorrow = document.querySelector(".cloudyTomorrow");
 
-      let elementPojutrzeTemp = document.querySelector(".pogodaPojutrze .temp");
-      let elementPojutrzeZachmurzenie = document.querySelector(".pogodaPojutrze .zachmurzenie");
+      let elementWeatherDayAfter = document.querySelector(".weatherNext .weatherDayAfter");
+      let elementDateDayAfter = document.querySelector(".headerDateDayAfter");
+      let elementIconDayAfter = document.querySelector(".iconDayAfter");
+      let elementTempDayAfter = document.querySelector(".tempDayAfter");
+      let elementCloudyDayAfter = document.querySelector(".cloudyDayAfter");
 
       let elementPrzycisk = document.querySelector("#przycisk");
-      let elementSunIcon = document.querySelector(".row3 .weatherIconSun");
+
+      let elementWindIcon = document.querySelector(".windIcon");
+      let elementSunriseIcon = document.querySelector(".sunriseIcon");
       
 
       
@@ -201,32 +219,39 @@
         let dzisZachodSlonca = dane.teraz.zachódSłońca;
         let dzisIkonka = dane.teraz.ikonka;
         
-
         let jutroTemp = dane.prognoza.jutro.temperatura;
         let jutroZachm = dane.prognoza.jutro.zachmurzenie;
+        let jutroIkonka = dane.prognoza.jutro.ikonka;
 
         let pojutrzeTemp = dane.prognoza.pojutrze.temperatura;
         let pojutrzeZachm = dane.prognoza.pojutrze.zachmurzenie;
+        let pojutrzeIkonka = dane.prognoza.pojutrze.ikonka;
 
         elementDzisTemp.innerHTML = dzisTemp + "°C";
-        elementDzisZachmurzenie.innerHTML = "Zachmurzenie: " + dzisZachm + "%";
-
-        elementWindHeader.innerHTML = "Wiatr";
-        elementDzisPredkoscWiatru.innerHTML = dzisPredkoscWiatru + " km/h";
-        elementDzisKierunekWiatru.innerHTML = dzisKierunekWiatru;
+        elementDzisZachmurzenie.innerHTML = "Zachmurzenie: <b>" + dzisZachm + "%</b>";   
+        elementDzisPredkoscWiatru.innerHTML = "Prędkość: <b>" + dzisPredkoscWiatru + " km/h</b>";
+        elementDzisKierunekWiatru.innerHTML = "Kierunek: <b>" + dzisKierunekWiatru + "</b>";
         elementDzisWschodSlonca.innerHTML = "Wschód słońca: <b>" + dzisWschodSlonca + "</b>";
         elementDzisZachodSlonca.innerHTML = "Zachód słońca: <b>" + dzisZachodSlonca + "</b>";
         elementDzisIkonka.innerHTML = '<img src="icons/ikonki/' + dzisIkonka + '.png">';
         header.innerHTML = "Pogoda aktualna - " + city;
 
-        elementJutroTemp.innerHTML = jutroTemp + " C";
-        elementJutroZachmurzenie.innerHTML = jutroZachm + "%";
+        elementDateTomorrow.innerHTML = "Pogoda jutro -&nbsp<b>" + ((dd++)+1) + "." + monthNumber + "." + yyyy + "</b>";
+        elementIconTomorrow.innerHTML = '<img src="icons/ikonki/' + jutroIkonka + '.png">';
+        elementTempTomorrow.innerHTML = jutroTemp + "°C";
+        elementCloudyTomorrow.innerHTML = jutroZachm + "%";
 
-        elementPojutrzeTemp.innerHTML = pojutrzeTemp + " C";
-        elementPojutrzeZachmurzenie.innerHTML = pojutrzeZachm + "%";
+        elementDateDayAfter.innerHTML = "Pogoda pojutrze - <b>" + ((dd++)+1) + "." + monthNumber + "." + yyyy + "</b>";
+        elementIconDayAfter.innerHTML = '<img src="icons/ikonki/' + pojutrzeIkonka + '.png">';
+        elementTempDayAfter.innerHTML = pojutrzeTemp + "°C";
+        elementCloudyDayAfter.innerHTML = pojutrzeZachm + "%";
 
-        elementSunIcon.classList.add("active");
-        elementCurrentWeather.classList.add("active");
+        elementWindIcon.innerHTML = '<img src="icons/ikonki/wiatr.png" alt="wind">';
+        elementSunriseIcon.innerHTML = '<img src="icons/ikonki/sunrise-sunset.png" alt="sunrise-sunset">';
+        
+        elementCurrentWeather.classList.remove("hidden");
+        elementWeatherTomorrow.classList.remove("hidden");
+        elementWeatherDayAfter.classList.remove("hidden");
       }
 
       function odbierzDane(response) {
@@ -266,11 +291,23 @@
       let mm = String(today.getMonth());
       let yyyy = today.getFullYear();
 
+      let monthNumber;
+
       let months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
       "lipiec", "sierpień", "wrzesień", "pazdziernik", "listopad", "grudzień"];
 
+      if (mm < 10){
+        monthNumber = "0" + mm;
+      } else {
+        monthNumber = mm;
+      }
+
       today = dd + ' ' + months[mm] + ' ' + yyyy;
       document.querySelector(".date").innerHTML = today;
+
+      tomorrow = d++;
+      dayAfterTomorrow = d++;
+      
 
     </script>
   </body>
